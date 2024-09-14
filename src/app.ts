@@ -1,13 +1,28 @@
 import express, { Application } from 'express';
+import mongoose from 'mongoose';
 import productRoutes from './presentation/routes/productRoutes';
 import { connectToDatabase } from './infrastructure/database/config/mongoose';
+import { startCrons, getLastCronRun  } from './infrastructure/cron/importProductsCron';
 
 const app: Application = express();
 
 app.use(express.json());
-app.use('/api', productRoutes);
+app.use(productRoutes);
 
 connectToDatabase();
+
+startCrons();
+
+// API Details
+app.get('/', async (req, res) => {
+  res.status(200).json({
+    status: 'API is running',
+    database: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+    lastCronRun: getLastCronRun() || 'Not yet executed',
+    uptime: process.uptime(),
+    memoryUsage: process.memoryUsage(),
+  });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
