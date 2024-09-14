@@ -36,7 +36,7 @@ export class ImportProductService {
       const outputFilePath = path.join(__dirname, `${baseFileName}`);
       const writeStream = fs.createWriteStream(outputFilePath);
       const gunzip = zlib.createGunzip();
-      
+
       const zippedData = await this.fetchFile(fileUrl, 'stream');
 
       try {
@@ -64,6 +64,25 @@ export class ImportProductService {
               code: data.code,
               product_name: data.product_name,
               imported_t: new Date(),
+              url: data.url,
+              creator: data.creator,
+              created_t: data.created_t,
+              last_modified_t: data.last_modified_t,
+              quantity: data.quantity,
+              brands: data.brands,
+              categories: data.categories,
+              labels: data.labels,
+              cities: data.cities,
+              purchase_places: data.purchase_places,
+              stores: data.stores,
+              ingredients_text: data.ingredients_text,
+              traces: data.traces,
+              serving_size: data.serving_size,
+              serving_quantity: data.serving_quantity,
+              nutriscore_score: data.nutriscore_score,
+              nutriscore_grade: data.nutriscore_grade,
+              main_category: data.main_category,
+              image_url: data.image_url,
             };
             await this.productRepository.save(newProduct);
             processedItems++;
