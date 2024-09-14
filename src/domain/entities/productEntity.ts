@@ -5,7 +5,7 @@ export class ProductEntity {
     public product_name: string,
     public url: string,
     public creator: string,
-    public created_t: Date,
+    public created_t: number,
     public last_modified_t: number,
     public quantity: string,
     public brands: string,

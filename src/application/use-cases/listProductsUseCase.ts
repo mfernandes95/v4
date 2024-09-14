@@ -1,5 +1,5 @@
 import { ProductRepository } from '../../domain/repositories/productRepository';
-import { IListProductsRequest, IListProductsResponse } from '../../domain/types/iListProductResponseTypes';
+import { IListProductsRequest, IListProductsResponse } from '../../domain/types/productTypes';
 
 export class ListProductsUseCase {
   constructor(private productRepository: ProductRepository) {}

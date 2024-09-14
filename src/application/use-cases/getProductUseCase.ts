@@ -1,13 +1,11 @@
 import { ProductRepository } from '../../domain/repositories/productRepository';
-
-interface IGetProductRequest {
-  code: string;
-}
+import { ProductEntity } from '../../domain/entities/productEntity';
+import { IGetProductRequest } from '../../domain/types/productTypes';
 
 export class GetProductUseCase {
   constructor(private productRepository: ProductRepository) {}
 
-  async execute(request: IGetProductRequest): Promise<any | null> {
+  async execute(request: IGetProductRequest): Promise<ProductEntity> {
     const { code } = request;
     const product = await this.productRepository.findByCode(code);
     if (!product) {

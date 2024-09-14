@@ -1,8 +1,5 @@
 import { ProductRepository } from '../../domain/repositories/productRepository';
-
-interface IDeleteProductRequest {
-  code: string;
-}
+import { IDeleteProductRequest } from '../../domain/types/productTypes';
 
 export class DeleteProductUseCase {
   constructor(private productRepository: ProductRepository) {}

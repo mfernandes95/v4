@@ -55,7 +55,7 @@ export class ImportProductService {
 
         let processedItems = 0;
         for await (const line of rl) {
-          if (processedItems >= 2) break;
+          if (processedItems >= 100) break;
 
           try {
             const data = JSON.parse(line);

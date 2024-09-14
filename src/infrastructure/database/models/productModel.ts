@@ -7,7 +7,7 @@ interface ProductDocument extends Document {
   product_name: string;
   url: string;
   creator: string;
-  created_t: Date;
+  created_t: number;
   last_modified_t: number;
   quantity: string;
   brands: string;
@@ -33,7 +33,7 @@ const ProductSchema: Schema<ProductDocument> = new Schema({
   product_name: { type: String },
   url: { type: String },
   creator: { type: String },
-  created_t: { type: Date },
+  created_t: { type: Number },
   last_modified_t: { type: Number },
   quantity: { type: String },
   brands: { type: String },

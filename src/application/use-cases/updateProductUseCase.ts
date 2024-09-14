@@ -1,10 +1,7 @@
 import { ProductRepository } from '../../domain/repositories/productRepository';
 import { ProductEntity } from '../../domain/entities/productEntity';
+import { IUpdateProductRequest } from '../../domain/types/productTypes';
 
-interface IUpdateProductRequest {
-  code: string;
-  data: Partial<ProductEntity>;
-}
 
 export class UpdateProductUseCase {
   constructor(private productRepository: ProductRepository) {}
