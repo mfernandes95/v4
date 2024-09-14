@@ -14,13 +14,10 @@ describe('UpdateProductUseCase', () => {
     };
 
     mockProductRepository.findByCode.mockResolvedValue(mockProduct);
-
     const updatedProduct = await updateProductUseCase.execute({
       code: '123',
       data: { product_name: 'Updated Product 1' },
     });
-
-    console.log('updatedProduct ==== ', updatedProduct);
 
     expect(updatedProduct).toEqual({
       ...mockProduct,
