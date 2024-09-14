@@ -1,89 +1,164 @@
+
 # Backend Challenge 20230105
 
 ## Introdução
 
-Nesse desafio trabalharemos no desenvolvimento de uma REST API para utilizar os dados do projeto Open Food Facts, que é um banco de dados aberto com informação nutricional de diversos produtos alimentícios.
+Este projeto consiste no desenvolvimento de uma API REST para gerenciar produtos alimentícios com base nos dados do Open Food Facts. A API foi projetada para suportar a equipe de nutricionistas da Fitness Foods LC, permitindo uma rápida revisão das informações nutricionais dos produtos. Além disso, um sistema CRON é configurado para realizar a importação dos dados mais recentes do Open Food Facts para o banco de dados todos os dias à meia-noite, garantindo que as informações estejam sempre atualizadas.
 
-O projeto tem como objetivo dar suporte a equipe de nutricionistas da empresa Fitness Foods LC para que eles possam revisar de maneira rápida a informação nutricional dos alimentos que os usuários publicam pela aplicação móvel.
+## Tecnologias Utilizadas
 
-### Antes de começar
- 
-- O projeto deve utilizar a Linguagem específica na avaliação. Por exempo: Python, R, Scala e entre outras;
-- Considere como deadline da avaliação a partir do início do teste. Caso tenha sido convidado a realizar o teste e não seja possível concluir dentro deste período, avise a pessoa que o convidou para receber instruções sobre o que fazer.
-- Documentar todo o processo de investigação para o desenvolvimento da atividade (README.md no seu repositório); os resultados destas tarefas são tão importantes do que o seu processo de pensamento e decisões à medida que as completa, por isso tente documentar e apresentar os seus hipóteses e decisões na medida do possível.
+- **Linguagem:** TypeScript
+- **Framework:** Node.js com Express
+- **Banco de Dados:** MongoDB (utilizando MongoDB Atlas)
+- **Design Patterns:** SOLID, DDD
+- **Testes:** Unitários
+- **Outros:** Docker
 
-## O projeto
- 
-- Criar um banco de dados MongoDB usando Atlas: https://www.mongodb.com/cloud/atlas ou algum Banco de Dados SQL se não sentir confortável com NoSQL;
-- Criar uma REST API com as melhores práticas de desenvolvimento, Design Patterns, SOLID e DDD.
-- Integrar a API com o banco de dados criado para persistir os dados
-- Recomendável usar Drivers oficiais para integração com o DB
-- Desenvolver Testes Unitários
+## Instalação e Uso
 
-### Modelo de Dados:
+### Pré-requisitos
 
-Para a definição do modelo, consultar o arquivo [products.json](./products.json) que foi exportado do Open Food Facts, um detalhe importante é que temos dois campos personalizados para poder fazer o controle interno do sistema e que deverão ser aplicados em todos os alimentos no momento da importação, os campos são:
+- Node.js (v18 ou superior)
+- MongoDB Atlas (ou uma instância MongoDB local)
+- Docker (opcional, para facilitar o deploy)
 
-- `imported_t`: campo do tipo Date com a dia e hora que foi importado;
-- `status`: campo do tipo Enum com os possíveis valores draft, trash e published;
+### Passos para Configuração
 
-### Sistema do CRON
+1. **Clone o Repositório**
 
-Para prosseguir com o desafio, precisaremos criar na API um sistema de atualização que vai importar os dados para a Base de Dados com a versão mais recente do [Open Food Facts](https://br.openfoodfacts.org/data) uma vez ao día. Adicionar aos arquivos de configuração o melhor horário para executar a importação.
+   ```bash
+   git clone https://github.com/mfernandes95/v4
+   cd backend-challenge-20230105
+   ```
 
-A lista de arquivos do Open Food, pode ser encontrada em: 
+2. Navegue até o diretório do projeto:
 
-- https://challenges.coode.sh/food/data/json/index.txt
-- https://challenges.coode.sh/food/data/json/data-fields.txt
+   ```bash
+   cd nome-do-projeto
+   ```
 
-Onde cada linha representa um arquivo que está disponível em https://challenges.coode.sh/food/data/json/{filename}.
+3. Instale as dependências:
 
-É recomendável utilizar uma Collection secundária para controlar os históricos das importações e facilitar a validação durante a execução.
+   ```bash
+   npm install
+   ```
 
-Ter em conta que:
+   ou
 
-- Todos os produtos deverão ter os campos personalizados `imported_t` e `status`.
-- Limitar a importação a somente 100 produtos de cada arquivo.
+   ```bash
+   yarn install
+   ```
+4. Crie um arquivo .env na raiz do projeto com as seguintes variáveis de ambiente:
 
-### A REST API
+   ```bash
+    MONGODB_URI=<sua-uri-do-mongodb>
+    PORT=3000
+    CRON_SCHEDULE="0 0 * * *"  # Executa a importação diariamente à meia-noite
+   ```
 
-Na REST API teremos um CRUD com os seguintes endpoints:
+   ou
 
- - `GET /`: Detalhes da API, se conexão leitura e escritura com a base de dados está OK, horário da última vez que o CRON foi executado, tempo online e uso de memória.
- - `PUT /products/:code`: Será responsável por receber atualizações do Projeto Web
- - `DELETE /products/:code`: Mudar o status do produto para `trash`
- - `GET /products/:code`: Obter a informação somente de um produto da base de dados
- - `GET /products`: Listar todos os produtos da base de dados, adicionar sistema de paginação para não sobrecarregar o `REQUEST`.
+   ```bash
+   yarn start
+   ```
 
-## Extras
+5. Inicie o servidor de desenvolvimento:
 
-- **Diferencial 1** Configuração de um endpoint de busca com Elastic Search ou similares;
-- **Diferencial 2** Configurar Docker no Projeto para facilitar o Deploy da equipe de DevOps;
-- **Diferencial 3** Configurar um sistema de alerta se tem algum falho durante o Sync dos produtos;
-- **Diferencial 4** Descrever a documentação da API utilizando o conceito de Open API 3.0;
-- **Diferencial 5** Escrever Unit Tests para os endpoints  GET e PUT do CRUD;
-- **Diferencial 6** Escrever um esquema de segurança utilizando `API KEY` nos endpoints. Ref: https://learning.postman.com/docs/sending-requests/authorization/#api-key
+   ```bash
+   npm start
+   ```
 
+   ou
 
+   ```bash
+   yarn start
+   ```
+6. Executar Testes:
 
-## Readme do Repositório
+   ``` bash
+   npm test
+   ```
 
-- Deve conter o título do projeto
-- Uma descrição sobre o projeto em frase
-- Deve conter uma lista com linguagem, framework e/ou tecnologias usadas
-- Como instalar e usar o projeto (instruções)
-- Não esqueça o [.gitignore](https://www.toptal.com/developers/gitignore)
-- Se está usando github pessoal, referencie que é um challenge by coodesh:  
+7. Abra o navegador e acesse:
 
->  This is a challenge by [Coodesh](https://coodesh.com/)
+   ```
+   http://localhost:3000
+   ```
 
-## Finalização e Instruções para a Apresentação
+## Estrutura do Projeto
 
-1. Adicione o link do repositório com a sua solução no teste
-2. Adicione o link da apresentação do seu projeto no README.md.
-3. Verifique se o Readme está bom e faça o commit final em seu repositório;
-4. Envie e aguarde as instruções para seguir. Sucesso e boa sorte. =)
+```plaintext
+project-root/
+├── src/
+│   ├── application/
+│   │   ├── use-cases/
+│   │   │   ├── getProductUseCase.ts
+│   │   │   └── ... (outros casos de uso)
+│   │   ├── interfaces/
+│   │   │   └── ... (interfaces de casos de uso)
+│   ├── domain/
+│   │   ├── entities/
+│   │   │   └── productEntity.ts
+│   │   ├── repositories/
+│   │   │   └── productRepository.ts
+│   │   └── types/
+│   │       └── productTypes.ts
+│   ├── infrastructure/
+│   │   ├── repositories/
+│   │   │   └── productRepositoryImpl.ts
+│   │   ├── database/
+│   │   │   └── ... (configuração e conexão com o banco de dados)
+│   │   └── ... (outros serviços de infraestrutura)
+│   ├── interfaces/
+│   │   ├── controllers/
+│   │   │   └── getProductController.ts
+│   │   ├── routes/
+│   │   │   └── productRoutes.ts
+│   │   └── middleware/
+│   │       └── ... (middleware, como autenticação)
+│   ├── errors/
+│   │   ├── productNotFoundError.ts
+│   │   └── ... (outros erros personalizados)
+│   ├── config/
+│   │   └── ... (configurações gerais, como .env)
+│   ├── server.ts
+│   └── app.ts
+├── tests/
+│   ├── unit/
+│   │   └── ... (testes unitários)
+│   ├── integration/
+│   │   └── ... (testes de integração)
+│   └── ... (outros testes)
+├── .env
+├── tsconfig.json
+├── package.json
+└── README.md
+```
 
-## Suporte
+## Endpoints da API
 
-Use a [nossa comunidade](https://discord.gg/rdXbEvjsWu) para tirar dúvidas sobre o processo ou envie uma mensagem diretamente a um especialista no chat da plataforma. 
+- **`GET /`**: Detalhes da API, incluindo:
+  - Status da conexão com o banco de dados
+  - Horário da última execução do CRON
+  - Tempo online
+  - Uso de memória
+
+- **`PUT /products/:code`**: Atualiza informações de um produto.
+
+- **`DELETE /products/:code`**: Muda o status do produto para `trash`.
+
+- **`GET /products/:code`**: Obtém informações de um produto específico.
+
+- **`GET /products`**: Lista todos os produtos com paginação.
+
+## Contribuição
+
+Contribuições são bem-vindas! Se você encontrar algum problema ou tiver sugestões para novas funcionalidades, sinta-se à vontade para abrir uma issue ou enviar um pull request.
+
+## Licença
+
+Este projeto é licenciado sob a licença XYZ - consulte o arquivo `LICENSE` para obter detalhes.
+
+## Autor
+
+Desenvolvido por Matheus Fernandes Pinheiro.
