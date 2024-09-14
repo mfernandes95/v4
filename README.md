@@ -53,7 +53,6 @@ Este projeto consiste no desenvolvimento de uma API REST para gerenciar produtos
    ```bash
     MONGODB_URI=<sua-uri-do-mongodb>
     PORT=3000
-    CRON_SCHEDULE="0 0 * * *"  # Executa a importação diariamente à meia-noite
    ```
 
    ou

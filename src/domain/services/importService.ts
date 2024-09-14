@@ -21,83 +21,106 @@ export class ImportProductService {
   }
 
   async fetchFile(url: string, responseType: 'json' | 'stream' = 'json'): Promise<any> {
-    const response = await axios.get(url, { responseType });
-    return response.data;
+    try {
+      const response = await axios.get(url, { responseType });
+      return response.data;
+    } catch (error) {
+      throw new Error(`Failed to fetch file from ${url}: ${error}`);
+    }
   }
 
-  async importData(): Promise<void> {
-    const indexUrl = 'https://challenges.coode.sh/food/data/json/index.txt';
-    const indexResponse = await this.fetchFile(indexUrl);
-    const files = indexResponse.split('\n').filter((file: string) => file);
-
-    for (const file of files) {
-      const fileUrl = `https://challenges.coode.sh/food/data/json/${file}`;
-      const baseFileName = path.basename(file, '.gz');
-      const outputFilePath = path.join(__dirname, `${baseFileName}`);
+  private async extractFile(fileUrl: string, outputFilePath: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
       const writeStream = fs.createWriteStream(outputFilePath);
       const gunzip = zlib.createGunzip();
 
-      const zippedData = await this.fetchFile(fileUrl, 'stream');
+      this.fetchFile(fileUrl, 'stream')
+        .then(zippedData => {
+          zippedData.pipe(gunzip).pipe(writeStream);
 
-      try {
-        zippedData.pipe(gunzip).pipe(writeStream);
-
-        await new Promise<void>((resolve, reject) => {
           writeStream.on('finish', resolve);
           writeStream.on('error', reject);
-        });
+        })
+        .catch(reject);
+    });
+  }
 
-        const readStream = createReadStream(outputFilePath, { encoding: 'utf-8' });
-        const rl = readline.createInterface({
-          input: readStream,
-          crlfDelay: Infinity,
-        });
+  private async processFile(filePath: string): Promise<void> {
+    const readStream = createReadStream(filePath, { encoding: 'utf-8' });
+    const rl = readline.createInterface({
+      input: readStream,
+      crlfDelay: Infinity,
+    });
 
-        let processedItems = 0;
-        for await (const line of rl) {
-          if (processedItems >= 100) break;
+    let processedItems = 0;
 
-          try {
-            const data = JSON.parse(line);
+    for await (const line of rl) {
+      if (processedItems >= 100) break;
 
-            const newProduct: ProductEntity = {
-              code: data.code,
-              product_name: data.product_name,
-              imported_t: new Date(),
-              url: data.url,
-              creator: data.creator,
-              created_t: data.created_t,
-              last_modified_t: data.last_modified_t,
-              quantity: data.quantity,
-              brands: data.brands,
-              categories: data.categories,
-              labels: data.labels,
-              cities: data.cities,
-              purchase_places: data.purchase_places,
-              stores: data.stores,
-              ingredients_text: data.ingredients_text,
-              traces: data.traces,
-              serving_size: data.serving_size,
-              serving_quantity: data.serving_quantity,
-              nutriscore_score: data.nutriscore_score,
-              nutriscore_grade: data.nutriscore_grade,
-              main_category: data.main_category,
-              image_url: data.image_url,
-            };
-            await this.productRepository.save(newProduct);
-            processedItems++;
-          } catch (err) {
-            console.error('Erro ao fazer parse do JSON:', err);
-          }
-        }
+      try {
+        const data = JSON.parse(line);
 
-        fs.unlinkSync(outputFilePath);
-        await this.historyRepository.save(new ImportHistoryEntity(new Date(), file, true));
+        const newProduct: ProductEntity = {
+          code: data.code,
+          product_name: data.product_name,
+          imported_t: new Date(),
+          url: data.url,
+          creator: data.creator,
+          created_t: data.created_t,
+          last_modified_t: data.last_modified_t,
+          quantity: data.quantity,
+          brands: data.brands,
+          categories: data.categories,
+          labels: data.labels,
+          cities: data.cities,
+          purchase_places: data.purchase_places,
+          stores: data.stores,
+          ingredients_text: data.ingredients_text,
+          traces: data.traces,
+          serving_size: data.serving_size,
+          serving_quantity: data.serving_quantity,
+          nutriscore_score: data.nutriscore_score,
+          nutriscore_grade: data.nutriscore_grade,
+          main_category: data.main_category,
+          image_url: data.image_url,
+        };
 
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        await this.historyRepository.save(new ImportHistoryEntity(new Date(), file, false, errorMessage));
+        await this.productRepository.save(newProduct);
+        processedItems++;
+      } catch (err) {
+        console.error('Error parsing JSON:', err);
       }
+    }
+  }
+
+  private async handleImportHistory(file: string, success: boolean, errorMessage?: string): Promise<void> {
+    await this.historyRepository.save(new ImportHistoryEntity(new Date(), file, success, errorMessage));
+  }
+
+  public async importData(): Promise<void> {
+    const indexUrl = 'https://challenges.coode.sh/food/data/json/index.txt';
+    
+    try {
+      const indexResponse = await this.fetchFile(indexUrl);
+      const files = indexResponse.split('\n').filter((file: string) => file);
+
+      for (const file of files) {
+        const fileUrl = `https://challenges.coode.sh/food/data/json/${file}`;
+        const baseFileName = path.basename(file, '.gz');
+        const outputFilePath = path.join(__dirname, `${baseFileName}`);
+
+        try {
+          await this.extractFile(fileUrl, outputFilePath);
+          await this.processFile(outputFilePath);
+          fs.unlinkSync(outputFilePath);
+          await this.handleImportHistory(file, true);
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          await this.handleImportHistory(file, false, errorMessage);
+        }
+      }
+    } catch (error) {
+      console.error('Error importing data:', error);
     }
   }
 }
