@@ -1,18 +1,17 @@
 import { UpdateProductUseCase } from '../../../src/application/use-cases/updateProductUseCase';
 import { ProductEntity } from '../../../src/domain/entities/productEntity';
 import { mockProductRepository } from '../../mocks/mockProductRepository';
+import { mockProduct } from '../../mocks/mockProductData';
+import { jest } from '@jest/globals';
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
 
 describe('UpdateProductUseCase', () => {
   const updateProductUseCase = new UpdateProductUseCase(mockProductRepository);
 
   it('should update the product if it exists', async () => {
-    const mockProduct: ProductEntity = {
-      code: '123',
-      product_name: 'Product 1',
-      imported_t: new Date(),
-      status: 'imported',
-    };
-
     mockProductRepository.findByCode.mockResolvedValue(mockProduct);
     const updatedProduct = await updateProductUseCase.execute({
       code: '123',

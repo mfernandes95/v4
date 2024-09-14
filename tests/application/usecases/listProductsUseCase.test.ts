@@ -1,14 +1,20 @@
 import { ListProductsUseCase } from '../../../src/application/use-cases/listProductsUseCase';
 import { ProductEntity } from '../../../src/domain/entities/productEntity';
 import { mockProductRepository } from '../../mocks/mockProductRepository';
+import { mockProduct } from '../../mocks/mockProductData';
+import { jest } from '@jest/globals';
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
 
 describe('ListProductsUseCase', () => {
   const listProductsUseCase = new ListProductsUseCase(mockProductRepository);
 
   it('should return paginated products', async () => {
     const mockProducts: ProductEntity[] = [
-      { code: '123', product_name: 'Product 1', imported_t: new Date(), status: 'published' },
-      { code: '456', product_name: 'Product 2', imported_t: new Date(), status: 'imported' },
+      mockProduct,
+      mockProduct
     ];
     const totalProducts = 20;
     mockProductRepository.findAll.mockResolvedValue([mockProducts, totalProducts]);
