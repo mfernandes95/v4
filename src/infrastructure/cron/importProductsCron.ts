@@ -12,7 +12,7 @@ const importService = new ImportProductService(
   historyRepository
 );
 
-const task = cron.schedule('18 6 * * *', async () => {
+const task = cron.schedule(process.env.CRON_SCHEDULE|| '0 15 * * *', async () => {
   console.log('Starting daily import...');
   try {
     await importService.importData();

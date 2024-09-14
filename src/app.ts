@@ -4,6 +4,9 @@ import productRoutes from './presentation/routes/productRoutes';
 import { connectToDatabase } from './infrastructure/database/config/mongoose';
 import { startCrons, getLastCronRun  } from './infrastructure/cron/importProductsCron';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 const app: Application = express();
 
 app.use(express.json());
