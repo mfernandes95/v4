@@ -9,7 +9,6 @@ import fs, { createReadStream } from 'fs';
 import readline from 'readline';
 import { CustomError } from '../../application/errors/CustomError';
 
-
 export class ImportProductService {
   private productRepository: ProductRepository;
   private historyRepository: ImportHistoryRepository;
@@ -25,7 +24,7 @@ export class ImportProductService {
   async fetchFile(
     url: string,
     responseType: 'json' | 'stream' = 'json'
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Promise<any> {
     try {
       const response = await axios.get(url, { responseType });

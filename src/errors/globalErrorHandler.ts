@@ -7,7 +7,6 @@ function globalErrorHandler(
   res: Response,
   next: NextFunction
 ) {
-  
   const statusCode = (err as CustomError).statusCode || 500;
   const message = err.message || 'Internal Server Error';
 
@@ -17,7 +16,7 @@ function globalErrorHandler(
     message: message,
   });
 
-  next()
+  next();
 }
 
 export default globalErrorHandler;

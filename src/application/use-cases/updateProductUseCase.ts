@@ -3,7 +3,6 @@ import { ProductEntity } from '../../domain/entities/productEntity';
 import { IUpdateProductRequest } from '../../domain/types/productTypes';
 import { CustomError } from '../errors/CustomError';
 
-
 export class UpdateProductUseCase {
   constructor(private productRepository: ProductRepository) {}
 

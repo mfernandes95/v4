@@ -6,13 +6,17 @@ const productRepository = new ProductRepositoryImpl();
 const deleteProductUseCase = new DeleteProductUseCase(productRepository);
 
 export class DeleteProductController {
-  async deleteProduct(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async deleteProduct(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { code } = req.params;
       await deleteProductUseCase.execute({ code });
       res.status(204).send();
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 }
