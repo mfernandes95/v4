@@ -10,9 +10,16 @@
 			"name": "List Products",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "api-key",
+						"value": "your_secret_api_key",
+						"type": "text",
+						"disabled": true
+					}
+				],
 				"url": {
-					"raw": "{{host,}}/products?limit=22&page=10",
+					"raw": "{{host,}}/products?limit=0&page=0?api_key=your_secret_api_key",
 					"host": [
 						"{{host,}}"
 					],
@@ -22,11 +29,11 @@
 					"query": [
 						{
 							"key": "limit",
-							"value": "22"
+							"value": "0"
 						},
 						{
 							"key": "page",
-							"value": "10"
+							"value": "0?api_key=your_secret_api_key"
 						}
 					]
 				}
@@ -37,15 +44,27 @@
 			"name": "Get Product",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "api-key",
+						"value": "your_secret_api_key",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "{{host,}}/products/0073504200108",
+					"raw": "{{host,}}/products/0000000000017?api_key=your_secret_api_key",
 					"host": [
 						"{{host,}}"
 					],
 					"path": [
 						"products",
-						"0073504200108"
+						"0000000000017"
+					],
+					"query": [
+						{
+							"key": "api_key",
+							"value": "your_secret_api_key"
+						}
 					]
 				}
 			},
@@ -55,15 +74,27 @@
 			"name": "Delete Product",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "api-key",
+						"value": "your_secret_api_key",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "{{host,}}/products/20221141",
+					"raw": "{{host,}}/products/00000000000172?api_key=your_secret_api_key",
 					"host": [
 						"{{host,}}"
 					],
 					"path": [
 						"products",
-						"20221141"
+						"00000000000172"
+					],
+					"query": [
+						{
+							"key": "api_key",
+							"value": "your_secret_api_key"
+						}
 					]
 				}
 			},
@@ -73,7 +104,13 @@
 			"name": "Update Product",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "api-key",
+						"value": "your_secret_api_key",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"status\": \"imported\"\r\n}",
@@ -84,13 +121,24 @@
 					}
 				},
 				"url": {
-					"raw": "{{host,}}/products/20221138",
+					"raw": "{{host,}}/products/0000000000017?api_key=your_secret_api_key",
 					"host": [
 						"{{host,}}"
 					],
 					"path": [
 						"products",
-						"20221138"
+						"0000000000017"
+					],
+					"query": [
+						{
+							"key": "api-key",
+							"value": "your_secret_api_key?api_key=your_secret_api_key",
+							"disabled": true
+						},
+						{
+							"key": "api_key",
+							"value": "your_secret_api_key"
+						}
 					]
 				}
 			},
