@@ -53,6 +53,17 @@ Este projeto consiste no desenvolvimento de uma API REST para gerenciar produtos
    ```bash
     MONGODB_URI=<sua-uri-do-mongodb>
     PORT=3000
+    API_KEY=your_secret_api_key
+
+    #OPTIONAL
+    EMAIL_HOST=sandbox.smtp.mailtrap.io
+    EMAIL_PORT=2525
+    EMAIL_USER=e085e74d1d4ddc
+    EMAIL_PASS=ad7b299ca7c212
+    
+    ALERT_EMAIL_TO=teste@email.com
+    ALERT_EMAIL_FROM=teste@email.com
+
    ```
 
    ou
