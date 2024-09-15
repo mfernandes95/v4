@@ -1,5 +1,6 @@
 import { ProductRepository } from '../../domain/repositories/productRepository';
 import { IDeleteProductRequest } from '../../domain/types/productTypes';
+import { CustomError } from '../errors/CustomError';
 
 export class DeleteProductUseCase {
   constructor(private productRepository: ProductRepository) {}
@@ -8,7 +9,7 @@ export class DeleteProductUseCase {
     const { code } = request;
     const product = await this.productRepository.findByCode(code);
     if (!product) {
-      throw new Error('Product not found');
+      throw new CustomError('Product not found', 404);
     }
 
     await this.productRepository.delete(code);

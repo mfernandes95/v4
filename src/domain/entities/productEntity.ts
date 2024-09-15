@@ -22,6 +22,6 @@ export class ProductEntity {
     public nutriscore_grade: string,
     public main_category: string,
     public image_url: string,
-    public status?: 'imported' | 'trash' | 'published',
+    public status?: 'imported' | 'trash' | 'published'
   ) {}
 }

@@ -14,7 +14,8 @@ const ImportHistorySchema: Schema<ImportHistoryDocument> = new Schema({
   errorMessage: { type: String },
 });
 
-const ImportHistoryModel: Model<ImportHistoryDocument> = mongoose.model<ImportHistoryDocument>('ImportHistory', ImportHistorySchema);
+const ImportHistoryModel: Model<ImportHistoryDocument> =
+  mongoose.model<ImportHistoryDocument>('ImportHistory', ImportHistorySchema);
 
 export default ImportHistoryModel;
 export type { ImportHistoryModel };

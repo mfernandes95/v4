@@ -7,6 +7,8 @@ import { ProductRepository } from '../repositories/productRepository';
 import path from 'path';
 import fs, { createReadStream } from 'fs';
 import readline from 'readline';
+import { CustomError } from '../../application/errors/CustomError';
+
 
 export class ImportProductService {
   private productRepository: ProductRepository;
@@ -20,22 +22,29 @@ export class ImportProductService {
     this.historyRepository = historyRepository;
   }
 
-  async fetchFile(url: string, responseType: 'json' | 'stream' = 'json'): Promise<any> {
+  async fetchFile(
+    url: string,
+    responseType: 'json' | 'stream' = 'json'
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<any> {
     try {
       const response = await axios.get(url, { responseType });
       return response.data;
     } catch (error) {
-      throw new Error(`Failed to fetch file from ${url}: ${error}`);
+      throw new CustomError(`Failed to fetch file from ${url}: ${error}`, 400);
     }
   }
 
-  private async extractFile(fileUrl: string, outputFilePath: string): Promise<void> {
+  private async extractFile(
+    fileUrl: string,
+    outputFilePath: string
+  ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       const writeStream = fs.createWriteStream(outputFilePath);
       const gunzip = zlib.createGunzip();
 
       this.fetchFile(fileUrl, 'stream')
-        .then(zippedData => {
+        .then((zippedData) => {
           zippedData.pipe(gunzip).pipe(writeStream);
 
           writeStream.on('finish', resolve);
@@ -61,7 +70,7 @@ export class ImportProductService {
         const data = JSON.parse(line);
 
         const newProduct: ProductEntity = {
-          code: data.code,
+          code: data.code.replace(/"/g, ''),
           product_name: data.product_name,
           imported_t: new Date(),
           url: data.url,
@@ -93,13 +102,19 @@ export class ImportProductService {
     }
   }
 
-  private async handleImportHistory(file: string, success: boolean, errorMessage?: string): Promise<void> {
-    await this.historyRepository.save(new ImportHistoryEntity(new Date(), file, success, errorMessage));
+  private async handleImportHistory(
+    file: string,
+    success: boolean,
+    errorMessage?: string
+  ): Promise<void> {
+    await this.historyRepository.save(
+      new ImportHistoryEntity(new Date(), file, success, errorMessage)
+    );
   }
 
   public async importData(): Promise<void> {
     const indexUrl = 'https://challenges.coode.sh/food/data/json/index.txt';
-    
+
     try {
       const indexResponse = await this.fetchFile(indexUrl);
       const files = indexResponse.split('\n').filter((file: string) => file);
@@ -115,7 +130,8 @@ export class ImportProductService {
           fs.unlinkSync(outputFilePath);
           await this.handleImportHistory(file, true);
         } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : String(error);
+          const errorMessage =
+            error instanceof Error ? error.message : String(error);
           await this.handleImportHistory(file, false, errorMessage);
         }
       }

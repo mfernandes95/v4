@@ -11,9 +11,17 @@ const getProductController = new GetProductController();
 const deleteProductController = new DeleteProductController();
 const updateProductController = new UpdateProductController();
 
-router.get('/products', (req, res) => listProductController.listProducts(req, res));
-router.get('/products/:code', (req, res) => getProductController.getProduct(req, res));
-router.delete('/products/:code', (req, res) => deleteProductController.deleteProduct(req, res));
-router.put('/products/:code', (req, res) => updateProductController.updateProduct(req, res));
+router.get('/products', (req, res, next) =>
+  listProductController.listProducts(req, res, next)
+);
+router.get('/products/:code', (req, res, next) =>
+  getProductController.getProduct(req, res, next)
+);
+router.delete('/products/:code', (req, res, next) =>
+  deleteProductController.deleteProduct(req, res, next)
+);
+router.put('/products/:code', (req, res, next) =>
+  updateProductController.updateProduct(req, res, next)
+);
 
 export default router;

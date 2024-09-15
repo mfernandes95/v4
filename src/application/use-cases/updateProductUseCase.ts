@@ -1,6 +1,7 @@
 import { ProductRepository } from '../../domain/repositories/productRepository';
 import { ProductEntity } from '../../domain/entities/productEntity';
 import { IUpdateProductRequest } from '../../domain/types/productTypes';
+import { CustomError } from '../errors/CustomError';
 
 
 export class UpdateProductUseCase {
@@ -10,7 +11,7 @@ export class UpdateProductUseCase {
     const { code, data } = request;
     const product = await this.productRepository.findByCode(code);
     if (!product) {
-      throw new Error('Product not found');
+      throw new CustomError('Product not found', 404);
     }
 
     const updatedProduct = { ...product, ...data };

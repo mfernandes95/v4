@@ -29,7 +29,11 @@ interface ProductDocument extends Document {
 const ProductSchema: Schema<ProductDocument> = new Schema({
   code: { type: String, required: true, unique: true },
   imported_t: { type: Date, required: true },
-  status: { type: String, enum: ['imported', 'trash', 'published'], default: 'imported' },
+  status: {
+    type: String,
+    enum: ['imported', 'trash', 'published'],
+    default: 'imported',
+  },
   product_name: { type: String },
   url: { type: String },
   creator: { type: String },
@@ -49,10 +53,13 @@ const ProductSchema: Schema<ProductDocument> = new Schema({
   nutriscore_score: { type: Number },
   nutriscore_grade: { type: String },
   main_category: { type: String },
-  image_url: { type: String }
+  image_url: { type: String },
 });
 
-const ProductModel: Model<ProductDocument> = mongoose.model<ProductDocument>('Product', ProductSchema);
+const ProductModel: Model<ProductDocument> = mongoose.model<ProductDocument>(
+  'Product',
+  ProductSchema
+);
 
 export default ProductModel;
 export type { ProductDocument };
