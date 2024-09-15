@@ -7,6 +7,7 @@ import {
   getLastCronRun,
 } from './infrastructure/cron/importProductsCron';
 import globalErrorHandler from './errors/globalErrorHandler';
+import apiKeyMiddleware from './middleware/apiKeyMiddleware';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -14,6 +15,8 @@ dotenv.config();
 const app: Application = express();
 
 app.use(express.json());
+
+app.use(apiKeyMiddleware)
 app.use(productRoutes);
 
 connectToDatabase();
