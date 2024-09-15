@@ -5,8 +5,8 @@ export const sendAlertEmail = async () => {
     const mailOptions = {
       from: process.env.ALERT_EMAIL_FROM,
       to: process.env.ALERT_EMAIL_TO,
-      subject: 'Alerta: Execução do CRON Job',
-      text: 'O CRON job foi executado com sucesso no sistema Node.js.',
+      subject: 'Alerta: Falha na execução do CRON Job',
+      text: 'O job do CRON não foi executado com sucesso no sistema. Consulte o banco de dados para mais informações.',
     };
 
     await transporter.sendMail(mailOptions);
