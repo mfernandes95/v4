@@ -24,6 +24,7 @@
     "express": "^4.20.0",
     "mongoose": "^8.6.1",
     "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.15",
     "zlib": "^1.0.5"
   },
   "devDependencies": {
@@ -35,6 +36,7 @@
     "@types/mongoose": "^5.11.96",
     "@types/node": "^22.5.4",
     "@types/node-cron": "^3.0.11",
+    "@types/nodemailer": "^6.4.15",
     "@typescript-eslint/eslint-plugin": "^8.5.0",
     "@typescript-eslint/parser": "^8.5.0",
     "eslint": "^9.10.0",
