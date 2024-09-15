@@ -28,13 +28,13 @@ Este projeto consiste no desenvolvimento de uma API REST para gerenciar produtos
 
    ```bash
    git clone https://github.com/mfernandes95/v4
-   cd backend-challenge-20230105
+   cd v4
    ```
 
 2. Navegue até o diretório do projeto:
 
    ```bash
-   cd nome-do-projeto
+   cd v4
    ```
 
 3. Instale as dependências:
@@ -83,6 +83,55 @@ Este projeto consiste no desenvolvimento de uma API REST para gerenciar produtos
    ```
    http://localhost:3000
    ```
+
+## Instruções Adicionais
+
+### 1. Collection do Postman
+
+Para facilitar o teste dos endpoints da API, uma collection do Postman está disponível no arquivo `V4.postman_collection.json` na raiz do projeto. Siga os passos abaixo para usá-la:
+
+1. Abra o Postman.
+2. Vá em **File > Import**.
+3. Selecione o arquivo `V4.postman_collection.json` que está localizado na raiz do projeto.
+4. A collection será carregada no Postman, contendo todos os endpoints da API para teste.
+
+A collection contém os seguintes endpoints:
+
+- **GET /products**: Lista todos os produtos.
+- **GET /products/:code**: Obtém informações de um produto específico.
+- **PUT /products/:code**: Atualiza informações de um produto.
+- **DELETE /products/:code**: Muda o status do produto para `trash`.
+
+### 2. Configuração do Agendamento do CRON
+
+O projeto inclui um cron job para realizar a importação dos dados mais recentes do Open Food Facts. O cron está configurado para rodar diariamente à meia-noite. A lógica do cron está localizada no arquivo `src/infrastructure/cron/importProductsCron.ts`.
+
+#### Alterar o Agendamento do CRON
+
+Para alterar o agendamento, edite diretamente o arquivo `src/infrastructure/cron/importProductsCron.ts` e modifique o padrão do cron de acordo com sua necessidade. O código atual é o seguinte:
+
+```typescript
+import cron from 'node-cron';
+
+const task = cron.schedule('0 0 * * *', async () => {
+  console.log('Starting daily import...');
+  try {
+    await importService.importData();
+    lastCronRun = new Date();
+    console.log('Daily import completed successfully.');
+  } catch (error) {
+    console.error('Daily import failed:', error);
+  }
+});
+
+task.start();
+```
+
+O valor **`'0 0 * * *'`** significa que o cron job será executado todos os dias à meia-noite. Para alterar o horário ou frequência, basta modificar essa string seguindo os padrões do cron.
+
+Exemplos:
+- **`'*/5 * * * *'`**: Executa a cada 5 minutos.
+- **`'0 12 * * *'`**: Executa todos os dias ao meio-dia.
 
 ## Estrutura do Projeto
 
