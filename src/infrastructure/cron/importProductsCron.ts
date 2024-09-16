@@ -18,9 +18,9 @@ const task = cron.schedule('0 0 * * *', async () => {
   try {
     await importService.importData();
     lastCronRun = new Date();
-    await sendAlertEmail();
     console.log('Daily import completed successfully.');
   } catch (error) {
+    await sendAlertEmail();
     console.error('Daily import failed:', error);
   }
 });
