@@ -13,7 +13,9 @@ const importService = new ImportProductService(
   historyRepository
 );
 
-const task = cron.schedule('0 0 * * *', async () => {
+const cronSchedule: string = process.env.CRON_SCHEDULE || '0 0 * * *';
+
+const task = cron.schedule(cronSchedule, async () => {
   console.log('Starting daily import...');
   try {
     await importService.importData();

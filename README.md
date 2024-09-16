@@ -55,6 +55,8 @@ Este projeto consiste no desenvolvimento de uma API REST para gerenciar produtos
     PORT=3000
     API_KEY=your_secret_api_key
 
+    CRON_SCHEDULE="0 0 * * *" # Exemplo: Todos os dias à meia-noite
+
     #OPTIONAL
     EMAIL_HOST=sandbox.smtp.mailtrap.io
     EMAIL_PORT=2525
@@ -114,37 +116,6 @@ A collection contém os seguintes endpoints:
 - **DELETE /products/:code**: Muda o status do produto para `trash`.
 
 Ou acesse http://localhost:3000/api-docs para visualizar a documentação da API.
-
-### 2. Configuração do Agendamento do CRON
-
-O projeto inclui um cron job para realizar a importação dos dados mais recentes do Open Food Facts. O cron está configurado para rodar diariamente à meia-noite. A lógica do cron está localizada no arquivo `src/infrastructure/cron/importProductsCron.ts`.
-
-#### Alterar o Agendamento do CRON
-
-Para alterar o agendamento, edite diretamente o arquivo `src/infrastructure/cron/importProductsCron.ts` e modifique o padrão do cron de acordo com sua necessidade. O código atual é o seguinte:
-
-```typescript
-import cron from 'node-cron';
-
-const task = cron.schedule('0 0 * * *', async () => {
-  console.log('Starting daily import...');
-  try {
-    await importService.importData();
-    lastCronRun = new Date();
-    console.log('Daily import completed successfully.');
-  } catch (error) {
-    console.error('Daily import failed:', error);
-  }
-});
-
-task.start();
-```
-
-O valor **`'0 0 * * *'`** significa que o cron job será executado todos os dias à meia-noite. Para alterar o horário ou frequência, basta modificar essa string seguindo os padrões do cron.
-
-Exemplos:
-- **`'*/5 * * * *'`**: Executa a cada 5 minutos.
-- **`'0 12 * * *'`**: Executa todos os dias ao meio-dia.
 
 ## Estrutura do Projeto
 
