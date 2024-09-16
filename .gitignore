@@ -31,6 +31,3 @@ yarn.lock
 .eslintcache
 .prettiercache
 
-# Husky
-.husky/_/
-

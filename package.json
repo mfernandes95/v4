@@ -13,19 +13,11 @@
     "dev": "nodemon",
     "lint": "eslint \"src/**/**/*.{ts,js}\"",
     "lint:fix": "eslint \"src/**/*.{ts,js}\" --fix",
-    "format": "prettier --write \"src/**/*.{ts,js,json,md}\"",
-    "prepare": "husky install"
+    "format": "prettier --write \"src/**/*.{ts,js,json,md}\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint && npm run format",
-      "pre-push": "npm run test",
-      "commit-msg": "npx --no-install commitlint --edit"
-    }
-  },
   "dependencies": {
     "axios": "^1.7.7",
     "dotenv": "^16.4.5",
