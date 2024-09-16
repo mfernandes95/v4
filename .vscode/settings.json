@@ -1,0 +1,9 @@
+{
+  "editor.formatOnSave": true, // Formata o código ao salvar
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.format.enable": true, // Usa o ESLint para formatar
+  "prettier.requireConfig": true, // Garante que o Prettier só formate quando há uma configuração
+  "editor.defaultFormatter": "esbenp.prettier-vscode" // Define o Prettier como formatador padrão
+}
