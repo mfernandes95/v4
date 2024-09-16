@@ -113,6 +113,8 @@ A collection contém os seguintes endpoints:
 - **PUT /products/:code**: Atualiza informações de um produto.
 - **DELETE /products/:code**: Muda o status do produto para `trash`.
 
+Ou acesse http://localhost:3000/api-docs para visualizar a documentação da API.
+
 ### 2. Configuração do Agendamento do CRON
 
 O projeto inclui um cron job para realizar a importação dos dados mais recentes do Open Food Facts. O cron está configurado para rodar diariamente à meia-noite. A lógica do cron está localizada no arquivo `src/infrastructure/cron/importProductsCron.ts`.
