@@ -19,9 +19,6 @@ coverage/
 jest-cache/
 jest-report/
 
-# .vscode directory
-.vscode/
-
 # Debugging artifacts
 *.log
 *.ts-log
