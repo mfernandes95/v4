@@ -41,6 +41,33 @@
 			"response": []
 		},
 		{
+			"name": "Details API",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "your_secret_api_key",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{host,}}?api_key=your_secret_api_key",
+					"host": [
+						"{{host,}}"
+					],
+					"query": [
+						{
+							"key": "api_key",
+							"value": "your_secret_api_key"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get Product",
 			"request": {
 				"method": "GET",

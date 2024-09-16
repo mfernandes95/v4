@@ -25,13 +25,8 @@ export class ImportProductService {
     responseType: 'json' | 'stream' = 'json'
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Promise<any> {
-    // eslint-disable-next-line no-useless-catch
-    try {
       const response = await axios.get(url, { responseType });
       return response.data;
-    } catch (error) {
-      throw error
-    }
   }
 
   private async extractFile(
@@ -114,8 +109,6 @@ export class ImportProductService {
   public async importData(): Promise<void> {
     const indexUrl = 'https://challenges.coode.sh/food/data/json/index.txt';
 
-    // eslint-disable-next-line no-useless-catch
-    try {
       const indexResponse = await this.fetchFile(indexUrl);
       const files = indexResponse.split('\n').filter((file: string) => file);
 
@@ -135,8 +128,5 @@ export class ImportProductService {
           await this.handleImportHistory(file, false, errorMessage);
         }
       }
-    } catch (error) {
-      throw error
-    }
   }
 }
