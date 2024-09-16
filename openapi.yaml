@@ -1,0 +1,378 @@
+openapi: 3.0.0
+info:
+  title: API de Produtos
+  description: Documentação da API para gerenciar produtos e detalhes da API.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Servidor local
+paths:
+  /:
+    get:
+      summary: Detalhes da API
+      description: Obtém informações sobre a API, incluindo status da conexão com a base de dados, horário da última execução do CRON, tempo online e uso de memória.
+      parameters:
+        - name: api_key
+          in: query
+          required: true
+          schema:
+            type: string
+            default: your_secret_api_key
+          description: API_KEY
+      responses:
+        '200':
+          description: Detalhes da API retornados com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  databaseStatus:
+                    type: string
+                    description: Status da conexão com a base de dados
+                  cronLastRun:
+                    type: string
+                    format: date-time
+                    description: Horário da última execução do CRON
+                  uptime:
+                    type: string
+                    description: Tempo online da aplicação
+                  memoryUsage:
+                    type: string
+                    description: Uso de memória da aplicação
+
+  /products/{code}:
+    put:
+      summary: Atualizar um produto
+      description: Recebe atualizações para um produto específico.
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Código do produto a ser atualizado
+        - name: api_key
+          in: query
+          required: true
+          schema:
+            type: string
+            default: your_secret_api_key
+          description: API_KEY
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: Código do produto
+                status:
+                  type: string
+                  description: Status do produto
+                imported_t:
+                  type: string
+                  format: date-time
+                  description: Data de importação do produto
+                url:
+                  type: string
+                  description: URL do produto
+                creator:
+                  type: string
+                  description: Criador do produto
+                created_t:
+                  type: integer
+                  description: Timestamp de criação
+                last_modified_t:
+                  type: integer
+                  description: Timestamp da última modificação
+                product_name:
+                  type: string
+                  description: Nome do produto
+                quantity:
+                  type: string
+                  description: Quantidade do produto
+                brands:
+                  type: string
+                  description: Marcas do produto
+                categories:
+                  type: string
+                  description: Categorias do produto
+                labels:
+                  type: string
+                  description: Rótulos do produto
+                cities:
+                  type: string
+                  description: Cidades onde o produto é vendido
+                purchase_places:
+                  type: string
+                  description: Locais de compra do produto
+                stores:
+                  type: string
+                  description: Lojas onde o produto é vendido
+                ingredients_text:
+                  type: string
+                  description: Texto dos ingredientes do produto
+                traces:
+                  type: string
+                  description: Possíveis traços de alérgenos
+                serving_size:
+                  type: string
+                  description: Tamanho da porção
+                serving_quantity:
+                  type: number
+                  description: Quantidade por porção
+                nutriscore_score:
+                  type: integer
+                  description: Pontuação Nutriscore
+                nutriscore_grade:
+                  type: string
+                  description: Nota Nutriscore
+                main_category:
+                  type: string
+                  description: Categoria principal do produto
+                image_url:
+                  type: string
+                  description: URL da imagem do produto
+      responses:
+        '200':
+          description: Produto atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Mensagem de sucesso
+        '400':
+          description: Solicitação inválida
+        '404':
+          description: Produto não encontrado
+
+    delete:
+      summary: Mudar o status de um produto para "trash"
+      description: Atualiza o status de um produto específico para "trash".
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Código do produto a ser excluído
+        - name: api_key
+          in: query
+          required: true
+          schema:
+            type: string
+            default: your_secret_api_key
+          description: API_KEY
+      responses:
+        '200':
+          description: Produto movido para trash com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Mensagem de sucesso
+        '404':
+          description: Produto não encontrado
+          
+    get:
+      summary: Obter informações de um produto
+      description: Retorna as informações de um produto específico com base no código fornecido.
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Código do produto a ser obtido
+        - name: api_key
+          in: query
+          required: true
+          schema:
+            type: string
+            default: your_secret_api_key
+          description: API_KEY
+      responses:
+        '200':
+          description: Produto encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: Código do produto
+                  status:
+                    type: string
+                    description: Status do produto
+                  imported_t:
+                    type: string
+                    format: date-time
+                    description: Data de importação do produto
+                  url:
+                    type: string
+                    description: URL do produto
+                  creator:
+                    type: string
+                    description: Criador do produto
+                  created_t:
+                    type: integer
+                    description: Timestamp de criação
+                  last_modified_t:
+                    type: integer
+                    description: Timestamp da última modificação
+                  product_name:
+                    type: string
+                    description: Nome do produto
+                  quantity:
+                    type: string
+                    description: Quantidade do produto
+                  brands:
+                    type: string
+                    description: Marcas do produto
+                  categories:
+                    type: string
+                    description: Categorias do produto
+                  labels:
+                    type: string
+                    description: Rótulos do produto
+                  stores:
+                    type: string
+                    description: Lojas onde o produto é vendido
+                  ingredients_text:
+                    type: string
+                    description: Texto dos ingredientes do produto
+                  traces:
+                    type: string
+                    description: Possíveis traços de alérgenos
+                  serving_size:
+                    type: string
+                    description: Tamanho da porção
+                  serving_quantity:
+                    type: number
+                    description: Quantidade por porção
+                  nutriscore_score:
+                    type: integer
+                    description: Pontuação Nutriscore
+                  nutriscore_grade:
+                    type: string
+                    description: Nota Nutriscore
+                  main_category:
+                    type: string
+                    description: Categoria principal do produto
+                  image_url:
+                    type: string
+                    description: URL da imagem do produto
+        '404':
+          description: Produto não encontrado
+
+  /products:
+    get:
+      summary: Listar todos os produtos
+      description: Retorna uma lista de todos os produtos na base de dados com suporte a paginação para evitar sobrecarga na requisição.
+      parameters:
+        - name: api_key
+          in: query
+          required: true
+          schema:
+            type: string
+            default: your_secret_api_key
+          description: API_KEY
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Número da página para paginação
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+          description: Número de produtos por página
+      responses:
+        '200':
+          description: Lista de produtos retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: string
+                      description: Código do produto
+                    status:
+                      type: string
+                      description: Status do produto
+                    imported_t:
+                      type: string
+                      format: date-time
+                      description: Data de importação do produto
+                    url:
+                      type: string
+                      description: URL do produto
+                    creator:
+                      type: string
+                      description: Criador do produto
+                    created_t:
+                      type: integer
+                      description: Timestamp de criação
+                    last_modified_t:
+                      type: integer
+                      description: Timestamp da última modificação
+                    product_name:
+                      type: string
+                      description: Nome do produto
+                    quantity:
+                      type: string
+                      description: Quantidade do produto
+                    brands:
+                      type: string
+                      description: Marcas do produto
+                    categories:
+                      type: string
+                      description: Categorias do produto
+                    labels:
+                      type: string
+                      description: Rótulos do produto
+                    stores:
+                      type: string
+                      description: Lojas onde o produto é vendido
+                    ingredients_text:
+                      type: string
+                      description: Texto dos ingredientes do produto
+                    traces:
+                      type: string
+                      description: Possíveis traços de alérgenos
+                    serving_size:
+                      type: string
+                      description: Tamanho da porção
+                    serving_quantity:
+                      type: number
+                      description: Quantidade por porção
+                    nutriscore_score:
+                      type: integer
+                      description: Pontuação Nutriscore
+                    nutriscore_grade:
+                      type: string
+                      description: Nota Nutriscore
+                    main_category:
+                      type: string
+                      description: Categoria principal do produto
+                    image_url:
+                      type: string
+                      description: URL da imagem do produto
+                      
+        '500':
+          description: Erro interno do servidor

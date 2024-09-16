@@ -1,5 +1,9 @@
 import express, { Application } from 'express';
 import mongoose from 'mongoose';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+import dotenv from 'dotenv';
+import path from 'path';
 import productRoutes from './presentation/routes/productRoutes';
 import { connectToDatabase } from './infrastructure/database/config/mongoose';
 import {
@@ -9,12 +13,14 @@ import {
 import globalErrorHandler from './errors/globalErrorHandler';
 import apiKeyMiddleware from './middleware/apiKeyMiddleware';
 
-import dotenv from 'dotenv';
 dotenv.config();
 
 const app: Application = express();
 
 app.use(express.json());
+
+const swaggerDocument = YAML.load(path.join(__dirname, '../openapi.yaml'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(apiKeyMiddleware)
 app.use(productRoutes);
